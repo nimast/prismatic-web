@@ -1,0 +1,41 @@
+{
+	"name": "Prismatic Web",
+	"version": "0.0.1",
+	"description": "A Browser extension revealing layers of computational approaches to art",
+	"homepage_url": "https://sfpc.study/",
+	"manifest_version": 3,
+	"minimum_chrome_version": "74",
+	"icons": {
+		"128": "icon.png"
+	},
+	"browser_specific_settings": {
+		"gecko": {
+			"id": "borderify@example.com"
+		}
+	},
+	"permissions": [
+		"activeTab"
+	],
+	"content_scripts": [
+		{
+			"run_at": "document_start",
+			"matches": [
+				"*://*/*"
+			],
+			"js": [
+				"content.js"
+			],
+			"css": [
+				"content.css"
+			]
+		}
+	],
+	"options_ui": {
+		"browser_style": true,
+		"page": "options.html"
+	},
+	"background": {
+		"type": "module",
+		"service_worker": "background.js"
+	}
+}
