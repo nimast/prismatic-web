@@ -1,2 +1,36 @@
 /* stylelint-disable */
 
+.left-sidebar-container {
+    visibility: hidden !important;
+    width: 0 !important;
+    height: 0;
+}
+
+.kix-appview-editor {
+    box-shadow: inset 1px 1px 11px 2px #c4c7c5;
+}
+
+#kix-horizontal-ruler-container {
+    display: none !important;
+}
+
+#layer-2, #layer-3 {
+    background-color: white;
+    transform: rotateX(60deg) rotateY(0deg) rotateZ(-45deg);
+    box-shadow: inset 1px 1px 11px 2px #c4c7c5;
+    position: absolute;
+}
+
+#layer-2 {
+    padding: 20px;
+    z-index: 10;
+    top: 62px;
+    right: 15px;
+}
+
+#layer-3 {
+    padding: 40px;
+    z-index: 0;
+    top: 80px;
+    right: 30px;
+}
