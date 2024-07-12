@@ -1,10 +1,42 @@
 import html2canvas from "html2canvas";
 
+let screenshotsNo = 0;
 function takeScreenShot() {
 	console.log('Taking screenshot...');
-	html2canvas(document.querySelector(".kix-appview-editor-container")).then(canvas => {
-		document.querySelector('#layer-2').appendChild(canvas);
-	});
+	let layer2 = document.querySelector('#layer-2');
+	let layer3 = document.querySelector('#layer-3');
+
+	if (screenshotsNo == 0) {
+		html2canvas(
+			document.querySelector(".kix-appview-editor-container"),
+			{
+				width: layer2.clientWidth,
+				height: layer2.clientHeight,
+				scale: 1,
+				onclone: async function (doc, el) {
+					el.style.transform = "none";
+				}
+			}).then(canvas => {
+				data = canvas.toDataURL("image/png");
+				layer2.src = data;
+		});
+		screenshotsNo++;
+	} 
+	// else if (screenshotsNo == 1){
+	// 	html2canvas(
+	// 		document.querySelector(".kix-appview-editor-container"),
+	// 		{
+	// 			width: layer3.clientWidth,
+	// 			height: layer3.clientHeight,
+	// 			scale: 1
+	// 		}).then(canvas => {
+	// 			data = canvas.toDataURL("image/png");
+	// 			// layer3.src = data;
+	// 	});
+	// 	screenshotsNo++;
+	// } else {
+
+	// }
 }
 
 function updateUI() {
@@ -32,7 +64,7 @@ function updateUI() {
 
 	setTimeout(() => {
 		takeScreenShot();
-	}, 1000);
+	}, 10000);
 }
 
 function setLayers() {
@@ -45,9 +77,9 @@ function setLayers() {
 
 		containerWidth = editor_container.clientWidth;
 		containerHeight = editor_container.clientHeight;
-		let layer2 = document.createElement('div');
+		let layer2 = document.createElement('img');
 		layer2.setAttribute('id', 'layer-2');
-		let layer3 = document.createElement('div');
+		let layer3 = document.createElement('img');
 		layer3.setAttribute('id', 'layer-3');
 		editor_container.parentElement.appendChild(layer2);
 		editor_container.parentElement.appendChild(layer3);
