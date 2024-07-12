@@ -1,3 +1,12 @@
+import html2canvas from "html2canvas";
+
+function takeScreenShot() {
+	console.log('Taking screenshot...');
+	html2canvas(document.querySelector(".kix-appview-editor-container")).then(canvas => {
+		document.querySelector('#layer-2').appendChild(canvas);
+	});
+}
+
 function updateUI() {
 
 	// skew editor: find the document element with class "kix-appview-editor-container" and set its style attribute to transform: rotateX(60deg) rotateY(0deg) rotateZ(-45deg);
@@ -20,9 +29,13 @@ function updateUI() {
 	document.querySelector('#kix-horizontal-ruler-container').style.visibility = 'hidden';
 	document.querySelector('#kix-horizontal-ruler-container').style.height = '0';
 	document.querySelector('#kix-horizontal-ruler-container').style.display = 'none';
+
+	setTimeout(() => {
+		takeScreenShot();
+	}, 1000);
 }
 
-function setLayers(){
+function setLayers() {
 	// skew editor: find the document element with class "kix-appview-editor-container" and set its style attribute to transform: rotateX(60deg) rotateY(0deg) rotateZ(-45deg);
 	let editor_container = document.querySelector('.kix-appview-editor-container');
 	let containerWidth, containerHeight;
