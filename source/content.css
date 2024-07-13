@@ -21,6 +21,13 @@
     position: absolute;
 }
 
+#layer-2, #layer-3 {
+    background-color: white;
+    transform: rotateX(60deg) rotateY(0deg) rotateZ(-45deg);
+    box-shadow: inset 1px 1px 11px 2px #c4c7c5;
+    position: absolute;
+}
+
 #layer-2 {
     padding: 20px;
     z-index: 10;
@@ -33,4 +40,10 @@
     z-index: 0;
     top: 80px;
     right: 30px;
+}
+
+#control {
+    margin: 20px;
+    font-size: 20px;
+    background-color: white;
 }

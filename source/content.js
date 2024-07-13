@@ -1,7 +1,9 @@
 import html2canvas from "html2canvas";
 
 let screenshotsNo = 0;
-function takeScreenShot() {
+let screenshotUrls = [];
+
+function takeScreenShots() {
 	console.log('Taking screenshot...');
 	let layer2 = document.querySelector('#layer-2');
 	let layer3 = document.querySelector('#layer-3');
@@ -19,30 +21,51 @@ function takeScreenShot() {
 			}).then(canvas => {
 				data = canvas.toDataURL("image/png");
 				layer2.src = data;
+				canvas.toBlob((blob) => {
+					screenshotUrls.push(URL.createObjectURL(blob))
+				});
 		});
 		screenshotsNo++;
 	} 
-	// else if (screenshotsNo == 1){
-	// 	html2canvas(
-	// 		document.querySelector(".kix-appview-editor-container"),
-	// 		{
-	// 			width: layer3.clientWidth,
-	// 			height: layer3.clientHeight,
-	// 			scale: 1
-	// 		}).then(canvas => {
-	// 			data = canvas.toDataURL("image/png");
-	// 			// layer3.src = data;
-	// 	});
-	// 	screenshotsNo++;
-	// } else {
-
-	// }
+	else if (screenshotsNo == 1){
+		html2canvas(
+			document.querySelector(".kix-appview-editor-container"),
+			{
+				width: layer3.clientWidth,
+				height: layer3.clientHeight,
+				scale: 1,
+				onclone: async function (doc, el) {
+					el.style.transform = "none";
+				}
+			}).then(canvas => {
+				data = canvas.toDataURL("image/png");
+				layer3.src = data;
+				canvas.toBlob((blob) => {
+					screenshotUrls.push(URL.createObjectURL(blob))
+				});
+			});
+		screenshotsNo++;
+	} else {
+		html2canvas(
+			document.querySelector(".kix-appview-editor-container"),
+			{
+				width: layer2.clientWidth,
+				height: layer2.clientHeight,
+				scale: 1
+			}).then(canvas => {
+				data = canvas.toDataURL("image/png");
+				canvas.toBlob((blob) => {
+					screenshotUrls.push(URL.createObjectURL(blob))
+				});
+		});
+	}
 }
 
 function updateUI() {
-
 	// skew editor: find the document element with class "kix-appview-editor-container" and set its style attribute to transform: rotateX(60deg) rotateY(0deg) rotateZ(-45deg);
 	setLayers()
+
+	document.querySelector('body').style.overflow = 'scroll';
 
 	// hide top toolbar: find the div with id docs-chrome and set its display style attribute to none
 	document.querySelector('#docs-chrome').style.display = 'none';
@@ -61,10 +84,6 @@ function updateUI() {
 	document.querySelector('#kix-horizontal-ruler-container').style.visibility = 'hidden';
 	document.querySelector('#kix-horizontal-ruler-container').style.height = '0';
 	document.querySelector('#kix-horizontal-ruler-container').style.display = 'none';
-
-	setTimeout(() => {
-		takeScreenShot();
-	}, 10000);
 }
 
 function setLayers() {
@@ -108,9 +127,44 @@ function updateLayers() {
 	}
 }
 
+let shotInterval;
+function toggleScreenshotting(e) {
+	e.preventDefault();
+	if (e.target.dataset.state == 'on') {
+		e.target.dataset.state = 'off';
+		control.textContent = "Start";
+		clearInterval(shotInterval);
+		console.log(screenshotUrls);
+	} else {
+		e.target.dataset.state = 'on';
+		control.textContent = "Stop";
+		setTimeout(() => {
+			takeScreenShots();
+		}, 5000);
+
+		shotInterval = setInterval(() => {
+			takeScreenShots();
+		}, 60000);
+	}
+}
+
+function openScreenshotUrls() {
+	
+}
+
+function addControls() {
+	let control = document.createElement('button');
+	control.setAttribute('id', 'control');
+	control.textContent = "Start";
+	control.addEventListener('click', function(e) {
+		toggleScreenshotting(e);
+	})
+	document.getElementById('docs-editor-container').appendChild(control);
+}
+
 async function init() {
 	updateUI();
-
+	addControls();
 	// const observer = new MutationObserver(updateUI);
 	// const observeFragment = (): void => {
 	// 	const ajaxFiles = select('#files ~ include-fragment[src*="/file-list/"]');
