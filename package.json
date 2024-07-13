@@ -31,6 +31,7 @@
   },
   "dependencies": {
     "element-ready": "^6.2.0",
+    "html2canvas": "^1.4.1",
     "select-dom": "^7.1.1",
     "webext-options-sync": "^2.0.1",
     "webextension-polyfill": "^0.8.0"
@@ -48,7 +49,7 @@
     "sourceDir": "distribution",
     "run": {
       "startUrl": [
-        "https://docs.google.com/document/d/16yEI7LgziHaz0IippuHb6J4ZcJI63yyTWBzOBer5lfw/edit?usp=sharing"
+        "https://docs.google.com/document/d/14IV-m2lPmg2P0Evd6ekvEOUkEXE1axnpYg3DLlRSFLE/edit"
       ]
     }
   }
