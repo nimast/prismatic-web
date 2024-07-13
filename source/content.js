@@ -1,7 +1,7 @@
 import html2canvas from "html2canvas";
 
 let screenshotsNo = 0;
-let screenshotUrls = [];
+let screenshotUrls = {};
 
 function takeScreenShots() {
 	console.log('Taking screenshot...');
@@ -22,8 +22,9 @@ function takeScreenShots() {
 				data = canvas.toDataURL("image/png");
 				layer2.src = data;
 				canvas.toBlob((blob) => {
-					screenshotUrls.push(URL.createObjectURL(blob))
+					screenshotUrls.push(URL.createObjectURL(blob));
 				});
+					canvas.toBlob((blob) => window.open(URL.createObjectURL(blob), '_blank'));
 		});
 		screenshotsNo++;
 	} 
@@ -41,7 +42,7 @@ function takeScreenShots() {
 				data = canvas.toDataURL("image/png");
 				layer3.src = data;
 				canvas.toBlob((blob) => {
-					screenshotUrls.push(URL.createObjectURL(blob))
+					screenshotUrls.push(URL.createObjectURL(blob));
 				});
 			});
 		screenshotsNo++;
@@ -51,11 +52,14 @@ function takeScreenShots() {
 			{
 				width: layer2.clientWidth,
 				height: layer2.clientHeight,
-				scale: 1
+				scale: 1,
+				onclone: async function (doc, el) {
+					el.style.transform = "none";
+				}
 			}).then(canvas => {
 				data = canvas.toDataURL("image/png");
 				canvas.toBlob((blob) => {
-					screenshotUrls.push(URL.createObjectURL(blob))
+					screenshotUrls.push(URL.createObjectURL(blob));
 				});
 		});
 	}
@@ -127,6 +131,12 @@ function updateLayers() {
 	}
 }
 
+function openScreenshotUrls() {
+	for (const [key, value] of Object.entries(screenshotUrls)) {
+		window.open(key, '_blank');
+	}
+}
+
 let shotInterval;
 function toggleScreenshotting(e) {
 	e.preventDefault();
@@ -135,6 +145,10 @@ function toggleScreenshotting(e) {
 		control.textContent = "Start";
 		clearInterval(shotInterval);
 		console.log(screenshotUrls);
+
+		setTimeout(() => {
+			openScreenshotUrls();
+		})
 	} else {
 		e.target.dataset.state = 'on';
 		control.textContent = "Stop";
@@ -148,9 +162,7 @@ function toggleScreenshotting(e) {
 	}
 }
 
-function openScreenshotUrls() {
-	
-}
+
 
 function addControls() {
 	let control = document.createElement('button');
@@ -183,3 +195,4 @@ async function init() {
 }
 
 init();
+
