@@ -1,7 +1,7 @@
 import html2canvas from "html2canvas";
 
 let screenshotsNo = 0;
-let screenshotUrls = {};
+let screenshotUrls = [];
 
 function takeScreenShots() {
 	console.log('Taking screenshot...');
@@ -24,7 +24,6 @@ function takeScreenShots() {
 				canvas.toBlob((blob) => {
 					screenshotUrls.push(URL.createObjectURL(blob));
 				});
-					canvas.toBlob((blob) => window.open(URL.createObjectURL(blob), '_blank'));
 		});
 		screenshotsNo++;
 	} 
@@ -132,8 +131,8 @@ function updateLayers() {
 }
 
 function openScreenshotUrls() {
-	for (const [key, value] of Object.entries(screenshotUrls)) {
-		window.open(key, '_blank');
+	for (const url of screenshotUrls) {
+		window.open(url, '_blank');
 	}
 }
 
